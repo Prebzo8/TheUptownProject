@@ -4,144 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>macOS Private Video</title>
+<title>macOS Desktop</title>
 
 <style>
-/* ===== GLOBAL ===== */
-body {
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
   margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #020617);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
                "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* ===== MAC WINDOW ===== */
-.window {
-  width: 90%;
-  max-width: 820px;
-  background: rgba(15, 23, 42, 0.9);
-  border-radius: 18px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+/* ===== DESKTOP ===== */
+body {
+  height: 100vh;
+  background: url("wallpaper.jpg") center/cover no-repeat fixed;
   overflow: hidden;
-  backdrop-filter: blur(20px);
 }
 
-/* ===== TITLE BAR ===== */
-.titlebar {
-  height: 44px;
-  background: linear-gradient(#1e293b, #020617);
+/* ===== MENU BAR ===== */
+.menubar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 28px;
+  background: rgba(25,25,25,0.65);
+  backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
-  padding: 0 14px;
-}
-
-/* macOS dots */
-.dots {
-  display: flex;
-  gap: 8px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.red    { background: #ff5f57; }
-.yellow { background: #febc2e; }
-.green  { background: #28c840; }
-
-/* ===== CONTENT ===== */
-.content {
-  padding: 28px;
+  padding: 0 12px;
   color: white;
+  font-size: 13px;
 }
 
-h2 {
-  margin-top: 0;
-  font-weight: 600;
+.menubar-left span {
+  margin-right: 14px;
+  font-weight: 500;
 }
 
-input {
+.menubar-right {
+  margin-left: auto;
+  display: flex;
+  gap: 12px;
+}
+
+/* ===== PASSWORD PROMPT ===== */
+.login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(25px);
+  padding: 24px 26px;
+  border-radius: 14px;
+  color: white;
+  width: 280px;
+  text-align: center;
+}
+
+.login input {
   width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: none;
-  margin-top: 16px;
-}
-
-button {
   margin-top: 14px;
-  padding: 14px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+.login button {
+  margin-top: 12px;
   width: 100%;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
   background: #3b82f6;
   color: white;
-  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 }
 
-button:hover {
-  background: #2563eb;
-}
-
 #error {
   margin-top: 10px;
+  font-size: 13px;
   color: #f87171;
+}
+
+/* ===== DOCK ===== */
+.dock {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(30px);
+  border-radius: 18px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 12px;
+}
+
+.dock img {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+/* ===== VIDEO ===== */
+.video-app {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 960px;
+  display: none;
 }
 
 video {
   width: 100%;
-  margin-top: 24px;
-  border-radius: 12px;
-  display: none;
+  border-radius: 14px;
   background: black;
 }
 
 /* ===== MOBILE ===== */
-@media (max-width: 600px) {
-  .window {
-    width: 100%;
-    height: 100vh;
-    border-radius: 0;
-  }
+@media (max-width: 768px) {
+  .dock { display: none; }
+  .video-app { width: 100%; height: auto; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="window">
-
-  <div class="titlebar">
-    <div class="dots">
-      <div class="dot red"></div>
-      <div class="dot yellow"></div>
-      <div class="dot green"></div>
-    </div>
+<!-- MENU BAR -->
+<div class="menubar">
+  <div class="menubar-left">
+    <span></span>
+    <span>Finder</span>
+    <span>File</span>
+    <span>Edit</span>
+    <span>View</span>
+    <span>Go</span>
+    <span>Window</span>
+    <span>Help</span>
   </div>
-
-  <div class="content">
-
-    <h2>Secure Video Player</h2>
-
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="unlock()">Unlock</button>
-
-    <p id="error"></p>
-
-    <video id="video" controls playsinline preload="auto">
-      <source src="video.mp4" type="video/mp4">
-    </video>
-
+  <div class="menubar-right">
+    <span>📶</span>
+    <span>🔋</span>
+    <span id="time"></span>
   </div>
+</div>
+
+<!-- PASSWORD -->
+<div class="login">
+  <h3>Enter Password</h3>
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="unlock()">Log In</button>
+  <div id="error"></div>
+</div>
+
+<!-- DOCK -->
+<div class="dock">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Finder_icon_macOS.png">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Safari_browser_logo.svg">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Apple_TV_Plus_logo.svg">
+</div>
+
+<!-- VIDEO -->
+<div class="video-app" id="videoApp">
+  <video id="video" controls playsinline preload="auto">
+    <source src="video.mp4" type="video/mp4">
+  </video>
 </div>
 
 <script>
@@ -150,16 +184,25 @@ const PASSWORD = "Patrick2924";
 function unlock() {
   const input = document.getElementById("password").value;
   const error = document.getElementById("error");
-  const video = document.getElementById("video");
 
   if (input === PASSWORD) {
-    video.style.display = "block";
-    video.load();
+    document.querySelector(".login").style.display = "none";
+    document.getElementById("videoApp").style.display = "block";
+    document.getElementById("video").load();
     error.textContent = "";
   } else {
     error.textContent = "Incorrect password";
   }
 }
+
+function updateTime() {
+  const now = new Date();
+  document.getElementById("time").textContent =
+    now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+setInterval(updateTime, 1000);
+updateTime();
 </script>
 
 </body>
