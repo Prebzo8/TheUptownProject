@@ -2,136 +2,146 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>macOS Desktop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>macOS</title>
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text";
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
+  background: black;
 }
 
-/* SCREENS */
-.screen {
+/* BOOT SCREEN */
+#boot {
   position: fixed;
   inset: 0;
-  display: none;
-}
-.active { display: block; }
-
-/* BOOT */
-#boot {
   background: black;
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 64px;
+  font-size: 48px;
+  color: white;
+  z-index: 10;
 }
 
-/* LOCK */
+/* LOCK SCREEN */
 #lock {
+  position: fixed;
+  inset: 0;
   background: url("wallpaper.jpg") center/cover no-repeat;
-}
-.lock-box {
-  height: 100%;
-  backdrop-filter: blur(20px);
-  display: flex;
-  flex-direction: column;
+  display: none;
   align-items: center;
   justify-content: center;
-  color: white;
+  backdrop-filter: blur(12px);
+  z-index: 9;
 }
-.lock-box input, .lock-box button {
-  margin-top: 12px;
-  padding: 10px;
-  border-radius: 8px;
+
+#lockBox {
+  background: rgba(0,0,0,0.35);
+  padding: 24px 28px;
+  border-radius: 18px;
+  display: flex;
+  gap: 12px;
+}
+
+#password {
+  padding: 10px 14px;
+  border-radius: 12px;
   border: none;
+  font-size: 16px;
+  outline: none;
+}
+
+#unlockBtn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+#error {
+  position: absolute;
+  bottom: 25%;
+  color: white;
+  font-size: 14px;
+  display: none;
 }
 
 /* DESKTOP */
 #desktop {
+  position: fixed;
+  inset: 0;
   background: url("wallpaper.jpg") center/cover no-repeat;
-}
-
-/* MENU BAR */
-.menubar {
-  height: 28px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(20px);
-  color: white;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-}
-.menubar .right { margin-left: auto; }
-
-/* ICONS */
-.icons {
-  position: absolute;
-  top: 40px;
-  left: 20px;
-  color: white;
-}
-.icon {
-  margin-bottom: 20px;
-  cursor: pointer;
+  display: none;
 }
 
 /* DOCK */
-.dock {
-  position: fixed;
-  bottom: 12px;
+#dock {
+  position: absolute;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(20px);
+  padding: 10px 20px;
+  border-radius: 24px;
   display: flex;
-  gap: 14px;
-  padding: 10px 16px;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(25px);
-  border-radius: 20px;
-}
-.dock img {
-  width: 52px;
-  cursor: pointer;
-}
-.bounce {
-  animation: bounce 0.5s;
-}
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  40% { transform: translateY(-12px); }
-  100% { transform: translateY(0); }
+  gap: 16px;
 }
 
-/* VIDEO APP */
-#videoApp {
+.dock-icon {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.dock-icon:hover {
+  transform: scale(1.25);
+}
+
+@keyframes bounce {
+  0%   { transform: translateY(0) scale(1.1); }
+  30%  { transform: translateY(-18px) scale(1.2); }
+  60%  { transform: translateY(0) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.dock-icon:active {
+  animation: bounce 0.5s;
+}
+
+/* VIDEO WINDOW */
+#videoWindow {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(30px);
+  background: rgba(0,0,0,0.85);
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 20;
 }
+
 video {
-  width: 80%;
-  max-width: 900px;
-  border-radius: 14px;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
   background: black;
 }
 
-/* BUTTON */
-.close {
+.closeVideo {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: white;
+  padding: 8px 14px;
+  border-radius: 10px;
   border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
   cursor: pointer;
 }
 </style>
@@ -140,78 +150,81 @@ video {
 <body>
 
 <!-- BOOT -->
-<div id="boot" class="screen active"></div>
+<div id="boot"></div>
 
 <!-- LOCK -->
-<div id="lock" class="screen">
-  <div class="lock-box">
-    <h2>Enter Password</h2>
-    <input type="password" id="pw">
-    <button onclick="unlock()">Unlock</button>
+<div id="lock">
+  <div id="lockBox">
+    <input id="password" type="password" placeholder="Password">
+    <button id="unlockBtn">Unlock</button>
   </div>
+  <div id="error">Incorrect Password</div>
 </div>
 
 <!-- DESKTOP -->
-<div id="desktop" class="screen">
-  <div class="menubar">
-     Finder File Edit View Go Window Help
-    <div class="right" id="clock"></div>
-  </div>
-
-  <div class="icons">
-    <div class="icon" onclick="openVideo()">🎬 Video</div>
-  </div>
-
-  <div class="dock">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Apple_TV_Plus_logo.svg"
-         onclick="dockLaunch(this)">
+<div id="desktop">
+  <div id="dock">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Finder_Icon_macOS_Big_Sur.png">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Safari_browser_logo.svg">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/5f/VLC_Icon.svg" id="videoIcon">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/59/System_Preferences_icon.png">
+    <img class="dock-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Terminalicon2.png">
   </div>
 </div>
 
 <!-- VIDEO -->
-<div id="videoApp">
-  <button class="close" onclick="closeVideo()">Close</button>
-  <video controls playsinline preload="auto">
+<div id="videoWindow">
+  <button class="closeVideo" onclick="closeVideo()">Close</button>
+  <video id="video" muted playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
 </div>
 
 <script>
-const PASSWORD = "Patrick2924";
+// CHANGE PASSWORD HERE
+const CORRECT_PASSWORD = "Patrick2924";
 
-/* BOOT → LOCK */
-setTimeout(() => show("lock"), 2000);
+// BOOT → LOCK
+setTimeout(() => {
+  document.getElementById("boot").style.display = "none";
+  document.getElementById("lock").style.display = "flex";
+}, 2000);
 
-/* SCREEN SWITCH */
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
+// UNLOCK HANDLER
+function attemptUnlock() {
+  const input = document.getElementById("password").value;
+  const error = document.getElementById("error");
 
-/* UNLOCK */
-function unlock() {
-  if (document.getElementById("pw").value === PASSWORD) {
-    show("desktop");
+  if (input === CORRECT_PASSWORD) {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("desktop").style.display = "block";
+  } else {
+    error.style.display = "block";
+    setTimeout(() => error.style.display = "none", 1500);
   }
 }
 
-/* CLOCK */
-setInterval(() => {
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-}, 1000);
+document.getElementById("unlockBtn").onclick = attemptUnlock;
+document.getElementById("password").addEventListener("keydown", e => {
+  if (e.key === "Enter") attemptUnlock();
+});
 
-/* VIDEO */
-function dockLaunch(el) {
-  el.classList.add("bounce");
-  setTimeout(() => el.classList.remove("bounce"), 500);
-  openVideo();
-}
-function openVideo() {
-  document.getElementById("videoApp").style.display = "flex";
-}
+// VIDEO ICON
+document.getElementById("videoIcon").onclick = () => {
+  const win = document.getElementById("videoWindow");
+  const vid = document.getElementById("video");
+  win.style.display = "flex";
+  vid.play();
+};
+
+// CLOSE VIDEO
 function closeVideo() {
-  document.getElementById("videoApp").style.display = "none";
+  const win = document.getElementById("videoWindow");
+  const vid = document.getElementById("video");
+  vid.pause();
+  vid.currentTime = 0;
+  win.style.display = "none";
 }
 </script>
 
