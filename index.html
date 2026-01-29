@@ -201,12 +201,13 @@ html, body {
 <!-- VIDEO WINDOW -->
 <div id="videoWindow">
   <button class="closeVideo" onclick="closeVideo()">✕</button>
-  <video id="video" muted playsinline>
+  <video id="video" controls autoplay muted playsinline>
     <source src="video.mp4" type="video/mp4">
+    Your browser does not support the video tag, or the file failed to load.
   </video>
 </div>
 <script>
-const CORRECT_PASSWORD = "Patrick2924";
+const CORRECT_PASSWORD = "macbook";
 
 const boot = document.getElementById("boot");
 const lock = document.getElementById("lock");
@@ -233,6 +234,7 @@ function unlock() {
   if (passwordInput.value === CORRECT_PASSWORD) {
     lock.style.display = "none";
     desktop.style.display = "block";
+    passwordInput.value = "";  // Clear password on success
     openVideo();  // Automatically play the video after successful unlock
   } else {
     error.style.display = "block";
@@ -245,7 +247,10 @@ function unlock() {
 function openVideo() {
   videoWindow.style.display = "flex";
   video.currentTime = 0;
-  video.play().catch(e => console.log("Video play failed:", e));
+  video.load();  // Reload source if needed
+  video.play()
+    .then(() => console.log("Video played successfully"))
+    .catch(e => console.log("Video play failed:", e.message));
 }
 
 function closeVideo() {
