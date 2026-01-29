@@ -49,27 +49,32 @@ html, body {
 #videoWindow { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); z-index: 60; }
 #videoWindow video { max-width: 80%; max-height: 80%; border-radius: 12px; }
 
-/* Slideshow Window */
-#slideshowWindow {
-  position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.9); z-index: 70;
+/* Notes Window (Grid View) */
+#notesWindow {
+  position: fixed; inset: 0; display: none; justify-content: center; align-items: center;
+  background: rgba(0,0,0,0.6); z-index: 70;
 }
-.slideshow-container {
-  position: relative; width: 90%; max-width: 1000px; text-align: center;
+.notes-box {
+  width: 560px; max-height: 80vh; background: #fff; border-radius: 14px; overflow: hidden;
 }
-.slideshow-img {
-  width: 100%; max-height: 75vh; border-radius: 16px; object-fit: contain;
+.notes-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: #f5f5f5; border-bottom: 1px solid #ddd;
 }
-.slideshow-nav {
-  position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; transform: translateY(-50%);
+.notes-title { font-weight: 600; }
+.closeNotes {
+  border: none; background: #ff5f57; color: white; width: 22px; height: 22px;
+  border-radius: 50%; cursor: pointer;
 }
-.slideshow-btn {
-  background: rgba(0,0,0,0.6); color: white; border: none; width: 50px; height: 50px;
-  border-radius: 50%; font-size: 24px; cursor: pointer;
+.notes-content {
+  padding: 20px; overflow-y: auto;
 }
-.closeSlideshow {
-  position: absolute; top: 20px; right: 20px; background: #ff5f57; color: white;
-  border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer;
+.notes-content h2 { margin-top: 0; }
+.notes-images {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.notes-images img {
+  width: 100%; border-radius: 10px; object-fit: cover;
 }
 </style>
 </head>
@@ -102,7 +107,7 @@ html, body {
     <span>Video</span>
   </div>
 
-  <!-- New Notes Folder -->
+  <!-- Notes Folder -->
   <div id="notesFolder" class="desktop-folder" onclick="openNotes()">
     <img src="notes.png">
     <span>READ ME 🚨</span>
@@ -126,20 +131,32 @@ html, body {
   </video>
 </div>
 
-<!-- Slideshow Window -->
-<div id="slideshowWindow">
-  <div class="slideshow-container">
-    <button class="closeSlideshow" onclick="closeNotes()">✕</button>
-    <img id="slideImage" class="slideshow-img" src="notes1.png" alt="Slide">
-    <div class="slideshow-nav">
-      <button class="slideshow-btn" onclick="prevSlide()">←</button>
-      <button class="slideshow-btn" onclick="nextSlide()">→</button>
+<!-- Notes Window -->
+<div id="notesWindow">
+  <div class="notes-box">
+    <div class="notes-header">
+      <span class="notes-title">Notes</span>
+      <button class="closeNotes" onclick="closeNotes()">✕</button>
+    </div>
+    <div class="notes-content">
+      <h2>READ ME 🚨</h2>
+      <div class="notes-images">
+        <img src="notes1.png">
+        <img src="notes2.png">
+        <img src="notes3.png">
+        <img src="notes4.png">
+        <img src="notes5.png">
+        <img src="notes6.png">
+        <img src="notes7.png">
+        <img src="notes8.png">
+        <img src="notes9.png">
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const CORRECT_PASSWORD = "macbook";
+const CORRECT_PASSWORD = "Patrick2924";
 
 const boot = document.getElementById("boot");
 const lock = document.getElementById("lock");
@@ -149,15 +166,7 @@ const error = document.getElementById("error");
 const clock = document.getElementById("clock");
 const video = document.getElementById("video");
 const videoWindow = document.getElementById("videoWindow");
-const slideshowWindow = document.getElementById("slideshowWindow");
-const slideImage = document.getElementById("slideImage");
-
-// Slideshow images
-const slides = [
-  "notes1.png", "notes2.png", "notes3.png", "notes4.png", "notes5.png",
-  "notes6.png", "notes7.png", "notes8.png", "notes9.png"
-];
-let currentSlide = 0;
+const notesWindow = document.getElementById("notesWindow");
 
 /* Clock */
 setInterval(() => {
@@ -197,39 +206,13 @@ function closeVideo() {
   videoWindow.style.display = "none";
 }
 
-/* Slideshow */
+/* Notes */
 function openNotes() {
-  currentSlide = 0;
-  showSlide();
-  slideshowWindow.style.display = "flex";
+  notesWindow.style.display = "flex";
 }
-
-function showSlide() {
-  slideImage.src = slides[currentSlide];
-}
-
-function nextSlide() {
-  currentSlide = (currentSlide + 1) % slides.length;
-  showSlide();
-}
-
-function prevSlide() {
-  currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-  showSlide();
-}
-
 function closeNotes() {
-  slideshowWindow.style.display = "none";
+  notesWindow.style.display = "none";
 }
-
-// Keyboard navigation
-document.addEventListener("keydown", (e) => {
-  if (slideshowWindow.style.display === "flex") {
-    if (e.key === "ArrowRight") nextSlide();
-    if (e.key === "ArrowLeft") prevSlide();
-    if (e.key === "Escape") closeNotes();
-  }
-});
 </script>
 </body>
 </html>
