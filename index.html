@@ -1,10 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>macOS Simulator</title>
-
 <style>
 html, body {
   margin: 0;
@@ -15,7 +15,6 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
   background: black;
 }
-
 /* Boot */
 #boot {
   position: fixed;
@@ -28,7 +27,6 @@ html, body {
   color: white;
   z-index: 50;
 }
-
 /* Lock Screen */
 #lock {
   position: fixed;
@@ -40,7 +38,6 @@ html, body {
   backdrop-filter: blur(14px);
   z-index: 40;
 }
-
 #lockCard {
   background: rgba(0,0,0,0.45);
   padding: 36px 44px;
@@ -50,7 +47,6 @@ html, body {
   align-items: center;
   gap: 14px;
 }
-
 /* BIGGER AVATAR */
 #avatar {
   width: 120px;
@@ -58,25 +54,21 @@ html, body {
   border-radius: 50%;
   object-fit: cover;
 }
-
 #username {
   color: white;
   font-size: 18px;
 }
-
 #password {
   padding: 10px 14px;
   border-radius: 12px;
   border: none;
   font-size: 16px;
 }
-
 #error {
   color: white;
   font-size: 14px;
   display: none;
 }
-
 /* Desktop */
 #desktop {
   position: fixed;
@@ -84,7 +76,6 @@ html, body {
   background: url("wallpaper.jpg") center/cover no-repeat;
   display: none;
 }
-
 #menubar {
   position: absolute;
   top: 0;
@@ -98,7 +89,6 @@ html, body {
   padding: 0 14px;
   font-size: 13px;
 }
-
 /* Desktop Icons */
 .desktop-folder {
   position: absolute;
@@ -109,22 +99,18 @@ html, body {
   user-select: none;
   width: 80px;
 }
-
 .desktop-folder img {
   width: 56px;
   height: 56px;
 }
-
 .desktop-folder span {
   color: white;
   font-size: 12px;
   margin-top: 4px;
   text-align: center;
 }
-
 #videoFolder { top: 40px; right: 40px; }
 #notesFolder { top: 120px; left: 40px; }
-
 /* Dock */
 #dock {
   position: absolute;
@@ -138,18 +124,15 @@ html, body {
   display: flex;
   gap: 16px;
 }
-
 .dock-icon {
   width: 64px;
   height: 64px;
   cursor: pointer;
   transition: transform 0.2s;
 }
-
 .dock-icon:hover {
   transform: scale(1.25);
 }
-
 /* Video Window */
 #videoWindow {
   position: fixed;
@@ -160,13 +143,11 @@ html, body {
   background: rgba(0,0,0,0.85);
   z-index: 60;
 }
-
 #videoWindow video {
   max-width: 80%;
   max-height: 80%;
   border-radius: 12px;
 }
-
 .closeVideo {
   position: absolute;
   top: 20px;
@@ -180,7 +161,6 @@ html, body {
   color: white;
   cursor: pointer;
 }
-
 /* Slideshow */
 #slideshowWindow {
   position: fixed;
@@ -191,20 +171,17 @@ html, body {
   background: rgba(0,0,0,0.9);
   z-index: 70;
 }
-
 .slideshow-container {
   position: relative;
   width: 90%;
   max-width: 1000px;
 }
-
 .slideshow-img {
   width: 100%;
   max-height: 75vh;
   border-radius: 16px;
   object-fit: contain;
 }
-
 .slideshow-nav {
   position: absolute;
   top: 50%;
@@ -214,7 +191,6 @@ html, body {
   padding: 0 20px;
   transform: translateY(-50%);
 }
-
 .slideshow-btn {
   background: rgba(0,0,0,0.6);
   color: white;
@@ -225,7 +201,6 @@ html, body {
   font-size: 24px;
   cursor: pointer;
 }
-
 .closeSlideshow {
   position: absolute;
   top: 20px;
@@ -241,40 +216,34 @@ html, body {
 }
 </style>
 </head>
-
 <body>
-
 <!-- Boot -->
 <div id="boot"></div>
-
 <!-- Lock Screen -->
 <div id="lock">
   <div id="lockCard">
     <img id="avatar" src="avatar.png">
     <div id="username">Prezbo</div>
+    <div style="color: white; font-size: 14px; text-align: center; margin: 10px 0;">Hint: Spongebob.png (text:Teacher,5/?/00,12/?/00)</div>
     <input id="password" type="password" placeholder="Password">
     <button onclick="unlock()">Unlock</button>
     <div id="error">Incorrect Password</div>
   </div>
 </div>
-
 <!-- Desktop -->
 <div id="desktop">
   <div id="menubar">
     <div> Finder File Edit View Go Window Help</div>
     <div id="clock"></div>
   </div>
-
   <div id="videoFolder" class="desktop-folder" onclick="openVideo()">
     <img src="vlc.png">
     <span>Video</span>
   </div>
-
   <div id="notesFolder" class="desktop-folder" onclick="openNotes()">
     <img src="notes.png">
     <span>READ ME 🚨</span>
   </div>
-
   <div id="dock">
     <img class="dock-icon" src="finder.png">
     <img class="dock-icon" src="safari.png">
@@ -283,7 +252,6 @@ html, body {
     <img class="dock-icon" src="terminal.png">
   </div>
 </div>
-
 <!-- Video -->
 <div id="videoWindow">
   <button class="closeVideo" onclick="closeVideo()">✕</button>
@@ -291,7 +259,6 @@ html, body {
     <source src="video.mp4" type="video/mp4">
   </video>
 </div>
-
 <!-- Slideshow -->
 <div id="slideshowWindow">
   <div class="slideshow-container">
@@ -303,36 +270,28 @@ html, body {
     </div>
   </div>
 </div>
-
 <script>
-const CORRECT_PASSWORD = "macbook";
-
+const CORRECT_PASSWORD = "Patrick2924";
 const boot = document.getElementById("boot");
 const lock = document.getElementById("lock");
 const desktop = document.getElementById("desktop");
 const passwordInput = document.getElementById("password");
 const error = document.getElementById("error");
 const clock = document.getElementById("clock");
-
 const video = document.getElementById("video");
 const videoWindow = document.getElementById("videoWindow");
-
 const slideshowWindow = document.getElementById("slideshowWindow");
 const slideImage = document.getElementById("slideImage");
-
 const slides = [
   "notes1.png","notes2.png","notes3.png","notes4.png","notes5.png",
   "notes6.png","notes7.png","notes8.png","notes9.png"
 ];
-
 let currentSlide = 0;
-
 /* Preload slides */
 slides.forEach(src => {
   const img = new Image();
   img.src = src;
 });
-
 /* Clock */
 setInterval(() => {
   clock.textContent = new Date().toLocaleTimeString([], {
@@ -340,13 +299,11 @@ setInterval(() => {
     minute: "2-digit"
   });
 }, 1000);
-
 /* Boot */
 setTimeout(() => {
   boot.style.display = "none";
   lock.style.display = "flex";
 }, 2000);
-
 /* Unlock */
 function unlock() {
   if (passwordInput.value === CORRECT_PASSWORD) {
@@ -360,7 +317,6 @@ function unlock() {
     passwordInput.value = "";
   }
 }
-
 /* Video */
 function openVideo() {
   videoWindow.style.display = "flex";
@@ -368,43 +324,35 @@ function openVideo() {
   video.load();
   video.play().catch(() => {});
 }
-
 function closeVideo() {
   video.pause();
   video.currentTime = 0;
   videoWindow.style.display = "none";
 }
-
 /* Slideshow */
 function openNotes() {
   currentSlide = 0;
   slideshowWindow.style.display = "flex";
   showSlide();
 }
-
 function showSlide() {
   slideImage.src = "";
   slideImage.src = slides[currentSlide];
 }
-
 slideImage.onerror = () => {
   slideImage.src = slides[0];
 };
-
 function nextSlide() {
   currentSlide = (currentSlide + 1) % slides.length;
   showSlide();
 }
-
 function prevSlide() {
   currentSlide = (currentSlide - 1 + slides.length) % slides.length;
   showSlide();
 }
-
 function closeNotes() {
   slideshowWindow.style.display = "none";
 }
-
 /* Keyboard */
 document.addEventListener("keydown", e => {
   if (slideshowWindow.style.display === "flex") {
@@ -414,6 +362,6 @@ document.addEventListener("keydown", e => {
   }
 });
 </script>
-
 </body>
 </html>
+```
