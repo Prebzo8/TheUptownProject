@@ -46,6 +46,8 @@ html, body {
 .desktop-folder span { color: white; font-size: 12px; margin-top: 4px; text-align: center; }
 #videoFolder { top: 40px; right: 40px; }
 #notesFolder { top: 120px; left: 40px; }
+#mapsFolder  { top: 200px; left: 40px; }   /* ← New Maps folder */
+
 /* Dock */
 #dock {
   position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -54,16 +56,27 @@ html, body {
 }
 .dock-icon { width: 64px; height: 64px; cursor: pointer; transition: transform 0.2s; }
 .dock-icon:hover { transform: scale(1.25); }
+
 /* Video Window */
 #videoWindow {
   position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
   background: rgba(0,0,0,0.85); z-index: 60;
 }
 #videoWindow video { max-width: 80%; max-height: 80%; border-radius: 12px; }
-.closeVideo {
+.closeVideo, .closeMaps {
   position: absolute; top: 20px; right: 20px; background: #ff5f57; border: none;
   width: 36px; height: 36px; border-radius: 50%; font-size: 20px; color: white; cursor: pointer;
 }
+
+/* Maps Window */
+#mapsWindow {
+  position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.85); z-index: 60;
+}
+#mapsWindow img {
+  max-width: 90%; max-height: 90%; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+}
+
 /* Slideshow */
 #slideshowWindow {
   position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
@@ -139,6 +152,12 @@ html, body {
     <img src="notes.png">
     <span>READ ME 🚨</span>
   </div>
+  <!-- New Maps Folder -->
+  <div id="mapsFolder" class="desktop-folder" onclick="openMaps()">
+    <img src="maps.png">
+    <span>Maps</span>
+  </div>
+
   <div id="dock">
     <img class="dock-icon" src="finder.png">
     <img class="dock-icon" src="safari.png">
@@ -154,6 +173,12 @@ html, body {
   <video id="video" controls autoplay muted playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
+</div>
+
+<!-- Maps Window (NEW) -->
+<div id="mapsWindow">
+  <button class="closeMaps" onclick="closeMaps()">✕</button>
+  <img id="mapImage" src="map.png" alt="Map">
 </div>
 
 <!-- Slideshow -->
@@ -185,7 +210,7 @@ html, body {
 </div>
 
 <script>
-const CORRECT_PASSWORDS = ["Patrick2924", "Patrick2925"];
+const CORRECT_PASSWORDS = ["Patrick2924", "SpongeBob2924"];
 
 const boot = document.getElementById("boot");
 const lock = document.getElementById("lock");
@@ -195,15 +220,13 @@ const error = document.getElementById("error");
 const clock = document.getElementById("clock");
 const video = document.getElementById("video");
 const videoWindow = document.getElementById("videoWindow");
+const mapsWindow = document.getElementById("mapsWindow");
 const slideshowWindow = document.getElementById("slideshowWindow");
 const slideImage = document.getElementById("slideImage");
 const hintWindow = document.getElementById("hintWindow");
 const hintButton = document.getElementById("hintButton");
 
-const slides = [
-  "notes1.png","notes2.png","notes3.png","notes4.png","notes5.png",
-  "notes6.png","notes7.png","notes8.png","notes9.png"
-];
+const slides = ["notes1.png","notes2.png","notes3.png","notes4.png","notes5.png","notes6.png","notes7.png","notes8.png","notes9.png"];
 let currentSlide = 0;
 
 /* Preload slides */
@@ -220,7 +243,7 @@ setTimeout(() => {
   lock.style.display = "flex";
 }, 2000);
 
-/* Unlock - now accepts TWO passwords */
+/* Unlock */
 function unlock() {
   if (CORRECT_PASSWORDS.includes(passwordInput.value)) {
     lock.style.display = "none";
@@ -245,6 +268,14 @@ function closeVideo() {
   video.pause();
   video.currentTime = 0;
   videoWindow.style.display = "none";
+}
+
+/* Maps (NEW) */
+function openMaps() {
+  mapsWindow.style.display = "flex";
+}
+function closeMaps() {
+  mapsWindow.style.display = "none";
 }
 
 /* Slideshow */
